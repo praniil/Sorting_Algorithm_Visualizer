@@ -23,6 +23,15 @@ int BubbleSort()
         printf("%d\t", arr[i]);
     }
 
+    for (int j = 0; j < arr.size(); ++j)
+    {
+        sf::RectangleShape rect(sf::Vector2f(5.f, arr[j]));
+        rect.setFillColor(sf::Color::Cyan);
+        rect.setPosition(j * 6.f, window.getSize().y - arr[j]);
+        window.draw(rect);
+    }
+    window.display();
+
     bubble_sort(window, arr);
 
     while (window.isOpen())
