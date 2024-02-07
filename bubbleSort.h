@@ -1,1 +1,1 @@
-int BubbleSort();
+int Sort();
