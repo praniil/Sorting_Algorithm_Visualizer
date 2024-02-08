@@ -8,7 +8,7 @@ CFLAGS = -std=c++11
 SFML_LIBS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 # Source files
-SRCS = bubbleSort.cpp main.cpp 
+SRCS = sort.cpp main.cpp 
 
 # Object files
 OBJS = $(SRCS:.cpp=.o)

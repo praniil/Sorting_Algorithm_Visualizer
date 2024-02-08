@@ -1,5 +1,5 @@
 #include<iostream>
-#include "bubbleSort.h"
+#include "sort.h"
 using namespace std;
 
 
