@@ -172,6 +172,57 @@ void iterativeMergeSort(sf::RenderWindow &window, std::vector<int> &array, int l
     }
 }
 
+int partation(sf::RenderWindow &window, std::vector<int> &array, int low, int high)
+{
+    int pivot = array[low];
+    int i = low, j = high;
+    while (i < j)
+    {
+        do
+        {
+            i++;
+        } while (array[i] <= pivot);
+        do
+        {
+            j--;
+        } while (array[j] > pivot);
+        if (i < j)
+        {
+            int temp;
+            temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+    }
+    int temp;
+    temp = array[j];
+    array[j] = array[low];
+    array[low] = array[j];
+    return j;
+}
+
+void quickSort(sf::RenderWindow &window, std::vector<int> &array, int low, int high)
+{
+    if (low < high)
+    {
+        int j = partation(window, array, low, high);
+        window.clear();
+        for (int j = 0; j < array.size() - 1; ++j)
+        {
+            sf::RectangleShape rect(sf::Vector2f(5.f, array[j]));
+            rect.setFillColor(sf::Color::Cyan);
+            rect.setPosition(j * 6.f, window.getSize().y - array[j]);
+            window.draw(rect);
+        }
+
+        // Display the window
+        window.display();
+        sf::sleep(sf::milliseconds(50));
+        quickSort(window, array, low, j);
+        quickSort(window, array, j + 1, high);
+    }
+}
+
 int Sort()
 {
     sf::RenderWindow window(sf::VideoMode(1600, 800), "Merge sort algorithm");
@@ -191,7 +242,8 @@ int Sort()
     window.display();
 
     // Start sorting
-    iterativeMergeSort(window, arr, arr.size());
+    // iterativeMergeSort(window, arr, arr.size() );
+    quickSort(window, arr, 0, arr.size() - 1);
 
     // Keep the window open
     while (window.isOpen())
