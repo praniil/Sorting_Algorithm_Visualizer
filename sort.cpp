@@ -1,8 +1,9 @@
 #include "SFML/Graphics.hpp"
-#include <stdio.h>
-#include <bits/stdc++.h>
 #include <vector>
 #include <random>
+#include <algorithm>
+#include <numeric>
+#include <chrono>
 #include "sort.h"
 
 void bubble_sort(sf::RenderWindow &window, std::vector<int> &arr)
@@ -11,7 +12,8 @@ void bubble_sort(sf::RenderWindow &window, std::vector<int> &arr)
     do
     {
         swapped = false;
-        for (int i = 0; i < arr.size(); i++)
+        // Fixed: prevent out-of-bounds access
+        for (size_t i = 0; i < arr.size() - 1; i++)
         {
 
             if (arr[i] > arr[i + 1])
@@ -22,7 +24,7 @@ void bubble_sort(sf::RenderWindow &window, std::vector<int> &arr)
                 arr[i + 1] = temp;
                 swapped = true;
                 window.clear();
-                for (int j = 0; j < arr.size(); ++j)
+                for (size_t j = 0; j < arr.size(); ++j)
                 {
                     sf::RectangleShape rect(sf::Vector2f(5.f, arr[j]));
                     rect.setFillColor(sf::Color::Cyan);
@@ -68,9 +70,9 @@ int Delete(sf::RenderWindow &window, std::vector<int> &array, int length)
             i = j;
             j = i * 2;
             window.clear();
-            for (int j = 2; j < array.size() - 1; ++j)
+            for (int k = 2; k < static_cast<int>(array.size()) - 1; ++k)
             {
-                sf::RectangleShape rect(sf::Vector2f(5.f, array[j]));
+                sf::RectangleShape rect(sf::Vector2f(5.f, array[k]));
                 rect.setFillColor(sf::Color::Cyan);
                 rect.setPosition(j * 6.f, window.getSize().y - array[j]);
                 window.draw(rect);
@@ -172,7 +174,7 @@ void iterativeMergeSort(sf::RenderWindow &window, std::vector<int> &array, int l
     }
 }
 
-int partation(sf::RenderWindow &window, std::vector<int> &array, int low, int high)
+int partition(sf::RenderWindow &window, std::vector<int> &array, int low, int high)
 {
     int pivot = array[low];
     int i = low, j = high;
@@ -181,11 +183,11 @@ int partation(sf::RenderWindow &window, std::vector<int> &array, int low, int hi
         do
         {
             i++;
-        } while (array[i] <= pivot);
+        } while (i < high && array[i] <= pivot);
         do
         {
             j--;
-        } while (array[j] > pivot);
+        } while (j > low && array[j] > pivot);
         if (i < j)
         {
             int temp;
@@ -194,10 +196,11 @@ int partation(sf::RenderWindow &window, std::vector<int> &array, int low, int hi
             array[j] = temp;
         }
     }
+    // Fixed: correctly swap pivot with element at position j
     int temp;
     temp = array[j];
     array[j] = array[low];
-    array[low] = array[j];
+    array[low] = temp;
     return j;
 }
 
@@ -205,11 +208,11 @@ void quickSort(sf::RenderWindow &window, std::vector<int> &array, int low, int h
 {
     if (low < high)
     {
-        int j = partation(window, array, low, high);
+        int j = partition(window, array, low, high);
         window.clear();
-        for (int j = 0; j < array.size() - 1; ++j)
+        for (int k = 0; k < static_cast<int>(array.size()) - 1; ++k)
         {
-            sf::RectangleShape rect(sf::Vector2f(5.f, array[j]));
+            sf::RectangleShape rect(sf::Vector2f(5.f, array[k]));
             rect.setFillColor(sf::Color::Cyan);
             rect.setPosition(j * 6.f, window.getSize().y - array[j]);
             window.draw(rect);
@@ -232,7 +235,7 @@ int Sort()
     std::shuffle(arr.begin(), arr.end(), std::default_random_engine(std::chrono::system_clock::now().time_since_epoch().count()));
 
     // Draw the initial array
-    for (int j = 0; j < arr.size(); ++j)
+    for (size_t j = 0; j < arr.size(); ++j)
     {
         sf::RectangleShape rect(sf::Vector2f(5.f, arr[j]));
         rect.setFillColor(sf::Color::Cyan);
